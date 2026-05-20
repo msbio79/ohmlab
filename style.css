@@ -1,0 +1,928 @@
+/* CSS 변수 및 기본 리셋 */
+:root {
+  --bg-app: #070913;
+  --bg-sidebar: rgba(13, 18, 38, 0.85);
+  --bg-card: rgba(22, 28, 56, 0.6);
+  --bg-card-light: #20284d;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(0, 229, 255, 0.4);
+  
+  --text-main: #f0f3ff;
+  --text-muted: #8c9bb4;
+  --text-dark: #0a0d18;
+  
+  --accent-cyan: #00e5ff;
+  --accent-yellow: #ffeb3b;
+  --accent-pink: #ff4081;
+  --accent-green: #39ff14;
+  
+  --font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+  --transition-speed: 0.25s;
+  
+  /* 옴의 법칙 색상 매칭 */
+  --v-color: #00e5ff;
+  --i-color: #ffeb3b;
+  --r-color: #ff9100;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* 전체 앱 레이아웃 */
+.app-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* 왼쪽 사이드바 */
+.sidebar {
+  width: 380px;
+  min-width: 350px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  z-index: 10;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent-cyan);
+}
+
+.logo-icon {
+  filter: drop-shadow(0 0 8px var(--accent-cyan));
+  animation: logo-glow 3s infinite ease-in-out;
+}
+
+@keyframes logo-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px var(--accent-cyan)); }
+  50% { filter: drop-shadow(0 0 12px var(--accent-cyan)); }
+}
+
+.sidebar-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-main);
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* 스크롤 가능한 본문 영역 */
+.sidebar-scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  -webkit-overflow-scrolling: touch; /* 모바일 관성 스크롤 */
+}
+
+/* 스크롤바 디자인 */
+.sidebar-scroll-content::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-scroll-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+.sidebar-scroll-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* 섹션 공통 스타일 */
+section {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  transition: border-color var(--transition-speed);
+}
+
+section:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-main);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* 1. 소자 도구 상자 그리드 */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.tool-btn {
+  background-color: var(--bg-card-light);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-main);
+  font-family: var(--font-family);
+  font-size: 11.5px;
+  font-weight: 500;
+  transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tool-btn svg {
+  transition: transform var(--transition-speed);
+}
+
+.tool-btn:hover {
+  border-color: var(--accent-cyan);
+  background-color: rgba(0, 229, 255, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.15);
+}
+
+.tool-btn:hover svg {
+  transform: scale(1.1);
+}
+
+.tool-btn:active {
+  transform: scale(0.96);
+  background-color: rgba(0, 229, 255, 0.1);
+}
+
+/* 2. 시뮬레이션 설정 */
+.control-group {
+  margin-bottom: 16px;
+}
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+.control-label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* 토글 스위치 커스텀 */
+.toggle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.toggle-container input {
+  display: none;
+}
+
+.toggle-slider {
+  width: 46px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  position: relative;
+  transition: background-color var(--transition-speed);
+  border: 1px solid var(--border-color);
+}
+
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #fff;
+  top: 2px;
+  left: 3px;
+  transition: transform var(--transition-speed);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.toggle-container input:checked + .toggle-slider {
+  background-color: var(--accent-cyan);
+}
+
+.toggle-container input:checked + .toggle-slider::after {
+  transform: translateX(22px);
+  background-color: var(--bg-app);
+}
+
+/* 라디오 버튼 커스텀 (가로 배치로 공간 최적화) */
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.02);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text-main);
+}
+
+.radio-label input {
+  display: none;
+}
+
+.radio-custom {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--text-muted);
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  transition: border-color var(--transition-speed);
+}
+
+.radio-custom::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-cyan);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform var(--transition-speed);
+}
+
+.radio-label input:checked + .radio-custom {
+  border-color: var(--accent-cyan);
+}
+
+.radio-label input:checked + .radio-custom::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* 3. 버튼 디자인 */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-speed);
+}
+
+.btn-danger {
+  background-color: rgba(255, 64, 129, 0.1);
+  color: var(--accent-pink);
+  border: 1px solid rgba(255, 64, 129, 0.2);
+}
+.btn-danger:hover {
+  background-color: var(--accent-pink);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
+}
+.btn-danger:active {
+  transform: scale(0.97);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+.btn-outline:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  background-color: rgba(255,255,255,0.05);
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+/* 4. 실시간 소자 제어 */
+#no-select-msg {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  padding: 10px 0;
+  display: none;
+}
+#no-select-msg.active {
+  display: block;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.selected-badge {
+  display: inline-block;
+  background-color: rgba(0, 229, 255, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.prop-control {
+  margin-bottom: 20px;
+}
+
+.prop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.prop-header label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.prop-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+/* 큰 터치 슬라이더 디자인 */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  outline: none;
+  margin: 10px 0;
+}
+
+/* Webkit 브라우저(iOS Safari, Chrome 등) */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px; /* 손가락 터치가 편리한 큰 크기 */
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+  transition: transform 0.1s ease;
+  border: 2px solid var(--bg-app);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  transform: scale(1.25);
+  background: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* 저항 색띠 학습 영역 */
+.color-code-container {
+  background-color: rgba(0,0,0,0.25);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 18px;
+}
+
+.color-code-container h4 {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.resistor-preview-strip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 1px dashed rgba(255,255,255,0.08);
+}
+
+.band-resistor-body {
+  width: 110px;
+  height: 18px;
+  background-color: #dfc49c; /* 갈색/베이지 저항 기본 바디 */
+  border-radius: 9px;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 8px;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.3);
+}
+
+/* 양 끝 도선 느낌 살리기 */
+.band-resistor-body::before, .band-resistor-body::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  width: 15px;
+  height: 2px;
+  background-color: #8c9bb4;
+}
+.band-resistor-body::before { left: -15px; }
+.band-resistor-body::after { right: -15px; }
+
+.band {
+  width: 4px;
+  height: 100%;
+  display: inline-block;
+  box-shadow: 1px 0 2px rgba(0,0,0,0.2);
+}
+
+.band-4 {
+  margin-left: 10px; /* 오차띠는 약간 간격을 둠 */
+}
+
+.color-meaning-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.badge-color {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 4px solid #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.action-buttons-compact {
+  margin-top: 14px;
+}
+
+/* 5. 옴의 법칙 카드 */
+.ohms-law-card {
+  border-color: rgba(255, 235, 59, 0.15);
+  background: linear-gradient(135deg, rgba(22, 28, 56, 0.6) 0%, rgba(13, 18, 38, 0.8) 100%);
+}
+
+.formula-container {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.formula-main {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.formula-letter {
+  display: inline-block;
+  text-shadow: 0 0 10px cubic-bezier(0, 0, 0.5, 1);
+}
+
+.v-color {
+  color: var(--v-color);
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+.i-color {
+  color: var(--i-color);
+  text-shadow: 0 0 10px rgba(255, 235, 59, 0.3);
+}
+
+.r-color {
+  color: var(--r-color);
+  text-shadow: 0 0 10px rgba(255, 145, 0, 0.3);
+}
+
+.formula-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.current-state-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.dash-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.dash-lbl {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dash-val {
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+}
+
+.interactive-formula-box {
+  padding: 12px;
+  background-color: rgba(255, 235, 59, 0.05);
+  border-left: 3px solid var(--accent-yellow);
+  border-radius: 0 8px 8px 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.formula-explain {
+  color: var(--text-muted);
+}
+
+.formula-fraction-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 8px;
+  color: #fff;
+}
+
+.fraction {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.fraction .num {
+  padding: 2px 4px;
+}
+
+.fraction .den {
+  border-top: 2px solid #fff;
+  padding: 4px 4px 2px 4px;
+}
+
+/* 오른쪽 캔버스 영역 */
+.canvas-area {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #0c0e1a;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+/* 캔버스 탑 툴바 */
+.canvas-toolbar {
+  height: 60px;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(13, 18, 38, 0.5);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 5;
+}
+
+.hint-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.hint-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-cyan);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 6px var(--accent-cyan);
+  animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 1; }
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zoom-btn {
+  width: 36px;
+  height: 36px;
+  background-color: var(--bg-card-light);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-speed);
+}
+
+.zoom-btn:hover {
+  background-color: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.zoom-btn:active {
+  transform: scale(0.92);
+}
+
+.zoom-btn.text-btn {
+  width: auto;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 캔버스 컨테이너 */
+.canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  touch-action: none; /* 브라우저 기본 확대/축소 및 패닝 제어 방지 */
+}
+
+#circuit-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+#circuit-canvas:active {
+  cursor: grabbing;
+}
+
+/* 모바일 전용 하단 바 (숨김 처리 후 미디어 쿼리에서 활성화) */
+.mobile-bottom-bar {
+  display: none;
+}
+
+/* 샘플 회로 선택기 */
+.sample-selector {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 16px 20px;
+}
+
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background-color: var(--bg-card-light);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.custom-select:hover, .custom-select:focus {
+  border-color: var(--accent-cyan);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.15);
+}
+
+.custom-select-wrapper::after {
+  content: '▼';
+  font-size: 10px;
+  color: var(--text-muted);
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* 푸터 */
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.sidebar-footer p {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================
+   반응형 레이아웃 스타일 (태블릿 & 모바일 터치 장치 최적화)
+   ========================================================== */
+
+/* 태블릿 (가로가 다소 좁은 화면 포함) */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 330px;
+    min-width: 330px;
+  }
+  .sidebar-header {
+    padding: 16px 20px;
+  }
+  .sidebar-scroll-content {
+    padding: 16px 20px;
+    gap: 18px;
+  }
+  .formula-main {
+    font-size: 30px;
+  }
+}
+
+/* 모바일 폰 해상도 (세로가 더 긴 일반 모바일) */
+@media (max-width: 768px) {
+  body {
+    overflow: auto; /* 모바일 전체 스크롤 해제 */
+  }
+
+  .app-container {
+    flex-direction: column; /* 세로 배치 */
+    height: auto;
+    overflow-x: hidden;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  }
+
+  .sidebar-scroll-content {
+    max-height: 400px; /* 너무 길어지지 않게 최대 높이 지정 */
+    overflow-y: auto; /* 내부 스크롤 보장 */
+  }
+
+  .canvas-area {
+    height: 60vh; /* 화면의 60% 정도를 캔버스가 차지 */
+    min-height: 400px;
+  }
+
+  .canvas-toolbar {
+    padding: 0 16px;
+    height: 50px;
+  }
+
+  /* 모바일 퀵 터치 바 활성화 */
+  .mobile-bottom-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(13, 18, 38, 0.9);
+    border-top: 1px solid var(--border-color);
+    padding: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 8;
+  }
+
+  .mobile-tool-btn {
+    background-color: var(--bg-card-light);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mobile-tool-btn:active {
+    background-color: var(--accent-cyan);
+    color: var(--bg-app);
+    transform: scale(0.95);
+  }
+}
