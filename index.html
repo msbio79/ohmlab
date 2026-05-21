@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>인터랙티브 옴의 법칙 시뮬레이션</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- 왼쪽 제어/메뉴 패널 -->
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <div class="header-top-row">
+          <div class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" width="28" height="28">
+              <path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+            <h1>옴의 법칙 실험실</h1>
+          </div>
+          <!-- 다크/라이트 모드 전환 버튼 -->
+          <button id="theme-toggle-btn" class="theme-toggle-btn" title="테마 전환">
+            <!-- 해 아이콘 (다크 모드일 때 표시) -->
+            <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <!-- 달 아이콘 (라이트 모드일 때 표시) -->
+            <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+        <p class="subtitle">충국쌤 과학 가상 실험 도구</p>
+      </header>
+
+      <!-- 스크롤 가능한 메뉴 영역 -->
+      <div class="sidebar-scroll-content">
+        <!-- 샘플 회로 선택기 -->
+        <section class="sample-selector">
+          <h2><span class="icon">📝</span> 회로 샘플</h2>
+          <div class="custom-select-wrapper">
+            <select id="circuit-sample-select" class="custom-select">
+              <option value="0">직접 만들기 (빈 화면)</option>
+              <option value="1">저항 1개 (기본)</option>
+              <option value="2">저항 2개 (직렬)</option>
+              <option value="3">저항 2개 (병렬)</option>
+              <option value="4">저항 3개 (직렬)</option>
+              <option value="5">저항 3개 (병렬)</option>
+              <option value="6">저항 3개 (직병렬 혼합 1)</option>
+              <option value="7">저항 4개 (직병렬 혼합 2)</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- 1. 소자 도구 상자 -->
+        <section class="toolbox">
+          <h2><span class="icon">🔌</span> 소자 도구 상자</h2>
+          <p class="section-desc">버튼을 누르거나 드래그하여 회로에 소자를 추가하세요.</p>
+          <div class="tool-grid">
+            <button class="tool-btn" id="add-battery" data-type="battery">
+              <svg viewBox="0 0 64 64" width="30" height="30">
+                <!-- 연결선 -->
+                <line x1="8" y1="32" x2="26" y2="32" stroke="#8c9bb4" stroke-width="3" stroke-linecap="round" />
+                <line x1="38" y1="32" x2="56" y2="32" stroke="#8c9bb4" stroke-width="3" stroke-linecap="round" />
+                <!-- 양극 (+) 판: 좌측, 길고 얇음 -->
+                <line x1="26" y1="12" x2="26" y2="52" stroke="#ff4081" stroke-width="3" stroke-linecap="round" />
+                <!-- 음극 (-) 판: 우측, 짧고 굵음 -->
+                <line x1="38" y1="22" x2="38" y2="42" stroke="#00e5ff" stroke-width="7" stroke-linecap="round" />
+                <!-- 극성 기호 -->
+                <text x="16" y="24" font-size="16" font-family="Outfit" font-weight="bold" fill="#ff4081" text-anchor="middle">+</text>
+                <text x="48" y="24" font-size="18" font-family="Outfit" font-weight="bold" fill="#00e5ff" text-anchor="middle">-</text>
+              </svg>
+              <span>배터리 (전원)</span>
+            </button>
+            <button class="tool-btn" id="add-resistor" data-type="resistor">
+              <svg viewBox="0 0 64 64" width="30" height="30">
+                <path d="M 4 32 L 16 32 L 20 20 L 24 44 L 28 20 L 32 44 L 36 20 L 40 44 L 44 20 L 48 32 L 60 32" 
+                      fill="none" stroke="#ff9100" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>저항기</span>
+            </button>
+            <button class="tool-btn" id="add-bulb" data-type="bulb">
+              <svg viewBox="0 0 64 64" width="30" height="30">
+                <!-- 연결선 -->
+                <line x1="4" y1="32" x2="18" y2="32" stroke="#8c9bb4" stroke-width="3" stroke-linecap="round" />
+                <line x1="46" y1="32" x2="60" y2="32" stroke="#8c9bb4" stroke-width="3" stroke-linecap="round" />
+                <!-- 전구 기호 원 -->
+                <circle cx="32" cy="32" r="14" fill="rgba(255, 235, 59, 0.05)" stroke="#ffeb3b" stroke-width="3" />
+                <!-- 내부 X 기호 -->
+                <line x1="22" y1="22" x2="42" y2="42" stroke="#ffeb3b" stroke-width="3" stroke-linecap="round" />
+                <line x1="22" y1="42" x2="42" y2="22" stroke="#ffeb3b" stroke-width="3" stroke-linecap="round" />
+              </svg>
+              <span>전구</span>
+            </button>
+            <button class="tool-btn" id="add-switch" data-type="switch">
+              <svg viewBox="0 0 64 64" width="30" height="30">
+                <!-- 연결선 -->
+                <line x1="4" y1="32" x2="18" y2="32" stroke="#ff4081" stroke-width="3" stroke-linecap="round" />
+                <line x1="46" y1="32" x2="60" y2="32" stroke="#ff4081" stroke-width="3" stroke-linecap="round" />
+                <!-- 접점 단자 도트 -->
+                <circle cx="18" cy="32" r="3.5" fill="#ff4081" />
+                <circle cx="46" cy="32" r="3.5" fill="#ff4081" />
+                <!-- 가동 레버 (열려 있는 스위치) -->
+                <line x1="18" y1="32" x2="43" y2="16" stroke="#ff4081" stroke-width="4.5" stroke-linecap="round" />
+              </svg>
+              <span>스위치</span>
+            </button>
+            <button class="tool-btn" id="add-ammeter" data-type="ammeter">
+              <svg viewBox="0 0 64 64" width="30" height="30">
+                <line x1="4" y1="32" x2="18" y2="32" stroke="#8c9bb4" stroke-width="3" stroke-linecap="round" />
+                <line x1="46" y1="32" x2="60" y2="32" stroke="#8c9bb4" stroke-width="3" stroke-linecap="round" />
+                <circle cx="32" cy="32" r="14" fill="rgba(255, 64, 129, 0.05)" stroke="#ff4081" stroke-width="3" />
+                <text x="32" y="38" font-size="16" font-family="Outfit" font-weight="bold" fill="#ff4081" text-anchor="middle">A</text>
+              </svg>
+              <span>전류계</span>
+            </button>
+            <button class="tool-btn" id="add-voltmeter" data-type="voltmeter">
+              <svg viewBox="0 0 64 64" width="30" height="30">
+                <line x1="4" y1="32" x2="18" y2="32" stroke="#8c9bb4" stroke-width="3" stroke-linecap="round" />
+                <line x1="46" y1="32" x2="60" y2="32" stroke="#8c9bb4" stroke-width="3" stroke-linecap="round" />
+                <circle cx="32" cy="32" r="14" fill="rgba(0, 229, 255, 0.05)" stroke="#00e5ff" stroke-width="3" />
+                <text x="32" y="38" font-size="16" font-family="Outfit" font-weight="bold" fill="#00e5ff" text-anchor="middle">V</text>
+              </svg>
+              <span>전압계</span>
+            </button>
+          </div>
+          <div class="action-buttons" style="margin-top: 12px;">
+            <button class="btn btn-danger" id="clear-circuit" style="padding: 10px;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>회로 전체 초기화</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 2. 시뮬레이션 설정 -->
+        <section class="settings">
+          <h2><span class="icon">⚙️</span> 시뮬레이션 설정</h2>
+          <div class="settings-list" style="display: flex; flex-direction: column; gap: 12px;">
+            <label class="toggle-container">
+              <span class="toggle-label">흐름 시각화</span>
+              <input type="checkbox" id="toggle-electrons" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="flow-direction" value="electrons" checked>
+                <span class="radio-custom"></span>전자 흐름
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="flow-direction" value="current">
+                <span class="radio-custom"></span>전류 방향
+              </label>
+            </div>
+            
+            <label class="toggle-container">
+              <span class="toggle-label">수치 상시 표시</span>
+              <input type="checkbox" id="toggle-values" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            
+            <label class="toggle-container">
+              <span class="toggle-label">회로 기호로 표시 (스케매틱)</span>
+              <input type="checkbox" id="toggle-symbols" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </section>
+
+        <!-- 3. 실시간 소자 분석 및 제어 -->
+        <section class="properties" id="property-section">
+          <h2><span class="icon">📊</span> 소자 분석 및 제어</h2>
+          <div id="no-select-msg" class="active">
+            <p>캔버스에서 <strong>소자(저항, 배터리 등)</strong>나 <strong>도선</strong>을 클릭하면 이곳에서 세부 조작 및 실시간 옴의 법칙 분석을 확인할 수 있습니다.</p>
+          </div>
+          
+          <div id="property-editor" class="hidden">
+            <div class="selected-badge">
+              <span id="selected-type-tag">저항기</span>
+            </div>
+            
+            <!-- 전압 변경 제어 (배터리 전용) -->
+            <div class="prop-control" id="prop-voltage-container">
+              <div class="prop-header">
+                <label for="voltage-slider">배터리 전압 (<span class="unit-v">V</span>)</label>
+                <span class="prop-val" id="voltage-val-display">9.0V</span>
+              </div>
+              <input type="range" id="voltage-slider" min="1" max="40" step="0.5" value="9">
+              <div class="range-labels">
+                <span>1V</span>
+                <span>20V</span>
+                <span>40V</span>
+              </div>
+            </div>
+
+            <!-- 저항값 변경 제어 (저항기, 전구 전용) -->
+            <div class="prop-control" id="prop-resistance-container">
+              <div class="prop-header">
+                <label for="resistance-slider">저항값 (<span class="unit-r">Ω</span>)</label>
+                <span class="prop-val" id="resistance-val-display">10Ω</span>
+              </div>
+              <input type="range" id="resistance-slider" min="1" max="100" step="1" value="10">
+              <div class="range-labels">
+                <span>1Ω</span>
+                <span>50Ω</span>
+                <span>100Ω</span>
+              </div>
+              
+              <!-- 저항 색띠 학습 영역 (저항기 전용) -->
+              <div id="resistor-color-code-box" class="color-code-container">
+                <h4>저항 색띠 (Color Code)</h4>
+                <div class="resistor-preview-strip">
+                  <div class="band-resistor-body">
+                    <span class="band band-1"></span>
+                    <span class="band band-2"></span>
+                    <span class="band band-3"></span>
+                    <span class="band band-4"></span>
+                  </div>
+                </div>
+                <div class="color-meaning-list">
+                  <span class="badge-color" id="band-1-meaning">갈색 (1)</span>
+                  <span class="badge-color" id="band-2-meaning">검정 (0)</span>
+                  <span class="badge-color" id="band-3-meaning">갈색 (x10)</span>
+                  <span class="badge-color" id="band-4-meaning">금색 (±5%)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="action-buttons-compact">
+              <button class="btn btn-sm btn-outline" id="rotate-selected">소자 회전 (90°)</button>
+              <button class="btn btn-sm btn-danger" id="delete-selected">선택 소자 삭제</button>
+            </div>
+          </div>
+          
+          <!-- 도선 제어 패널 (도선 선택 시 활성화) -->
+          <div id="wire-editor" class="hidden">
+            <div class="selected-badge" style="background-color: rgba(255, 64, 129, 0.15); color: #ff4081; border-color: rgba(255, 64, 129, 0.25);">
+              <span>선택된 도선</span>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); margin: 16px 0; line-height: 1.5; text-align: center;">
+              선택한 도선은 캔버스에서 밝은 핑크색 발광 윤곽선으로 하이라이트됩니다.
+            </p>
+            <div class="action-buttons-compact">
+              <button class="btn btn-sm btn-danger" id="delete-selected-wire" style="width: 100%;">선택 도선 삭제</button>
+            </div>
+          </div>
+
+          <!-- 실시간 옴의 법칙 분석 패널 (소자나 도선이 선택되면 보임) -->
+          <div id="analysis-panel" class="hidden">
+            <hr class="section-divider" style="margin: 20px 0; border: none; border-top: 1px solid var(--border-color);" />
+
+            
+            <div class="current-state-dashboard" style="display: flex; flex-direction: column; gap: 8px;">
+              <div class="dash-row" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(255, 255, 255, 0.02); border-radius: 8px; border: 1px solid var(--border-color);">
+                <span class="dash-lbl v-color" style="font-size: 12px; font-weight: 500;">⚡ 전압 (Voltage)</span>
+                <span class="dash-val" id="dash-v-val" style="font-size: 14px; font-weight: 700;">--</span>
+              </div>
+              <div class="dash-row" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(255, 255, 255, 0.02); border-radius: 8px; border: 1px solid var(--border-color);">
+                <span class="dash-lbl i-color" style="font-size: 12px; font-weight: 500;">🌊 전류 (Current)</span>
+                <span class="dash-val" id="dash-i-val" style="font-size: 14px; font-weight: 700;">--</span>
+              </div>
+              <div class="dash-row" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(255, 255, 255, 0.02); border-radius: 8px; border: 1px solid var(--border-color);">
+                <span class="dash-lbl r-color" style="font-size: 12px; font-weight: 500;">🚧 저항 (Resistance)</span>
+                <span class="dash-val" id="dash-r-val" style="font-size: 14px; font-weight: 700;">--</span>
+              </div>
+            </div>
+
+
+          </div>
+        </section>
+      </div>
+      
+      <footer class="sidebar-footer">
+        <p>© 2026 made by 충국쌤</p>
+      </footer>
+    </aside>
+
+    <!-- 오른쪽 캔버스 영역 -->
+    <main class="canvas-area">
+      <!-- 캔버스 탑 툴바 -->
+      <div class="canvas-toolbar">
+        <div class="hint-message">
+          <span class="hint-dot"></span>
+          <span id="instruction-text">도구를 추가하고 소자의 빨간색/파란색 단자를 이어주세요!</span>
+        </div>
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="zoom-in" title="확대">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+          <button class="zoom-btn" id="zoom-out" title="축소">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+          <button class="zoom-btn text-btn" id="zoom-reset" title="원래 크기로">100%</button>
+          <button class="zoom-btn" id="canvas-center" title="화면 중앙 정렬">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 시뮬레이터 캔버스 컨테이너 -->
+      <div class="canvas-container" id="canvas-container">
+        <canvas id="circuit-canvas"></canvas>
+      </div>
+
+      <!-- 모바일 하단 플로팅 소자 보관함 (미디어 쿼리용) -->
+      <div class="mobile-bottom-bar">
+        <!-- 모바일에서는 왼쪽 패널이 숨겨지거나 위로 올라갈 수 있으므로 화면 하단에 퀵 버튼 제공 -->
+        <button class="mobile-tool-btn" data-type="battery">🔋 배터리</button>
+        <button class="mobile-tool-btn" data-type="resistor">🚧 저항기</button>
+        <button class="mobile-tool-btn" data-type="bulb">💡 전구</button>
+        <button class="mobile-tool-btn" data-type="switch">🔌 스위치</button>
+        <button class="mobile-tool-btn" data-type="ammeter">🅰️ 전류계</button>
+        <button class="mobile-tool-btn" data-type="voltmeter">♈ 전압계</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
